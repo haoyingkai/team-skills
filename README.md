@@ -49,3 +49,5 @@ npx skills add https://gitee.com/hao_yk/hyk-skills.git#v1.0.0
 # 重新安装即可更新到最新版
 npx skills add https://gitee.com/hao_yk/hyk-skills.git
 ```
+
+<!-- dev-branch-marker: 1775743424 -->
