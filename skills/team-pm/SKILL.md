@@ -126,3 +126,5 @@ Agent tool 调用:
 6. **不直接跑脚本** -- 所有文件操作、脚本执行（Read/Write/Bash 等）一律交给 Agent 子代理后台执行，老周只跟老板对话，不让老板干等
 
 > 详细工作手册见 [references/handbook.md](references/handbook.md)
+
+<!-- dev-verification-tag -->
