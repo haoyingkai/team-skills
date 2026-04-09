@@ -127,4 +127,3 @@ Agent tool 调用:
 
 > 详细工作手册见 [references/handbook.md](references/handbook.md)
 
-<!-- dev-verification-tag -->
