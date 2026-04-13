@@ -9,8 +9,14 @@
 如果老板提供了任务编号（如 `/team-cr TASK-003`）：
 
 1. 读取 `task.json` 的 `progress_summary` + DEV 改动的文件列表
-2. 检查 `review.md` 是否存在 → 存在则读（续审场景）
-3. **不读** prd.md / arch.md 全文 → 只在审查时遇到"这个需求对不对"时才按需读验收标准
+2. **Epic 感知**（轻量）：如果 `task.json` 的 `epic_id` 非 null：
+   - 读 `epic.json` 的 `title` 和 `tasks` 列表 → 了解 Epic 全局背景（一句话即可）
+   - **不深入读其他子任务**，CR 的上下文要留给代码
+3. **依赖检查**：如果 `task.json` 有 `depends_on`：
+   - 确认上游 DEV 任务 `status = "done"`
+   - 如果上游未完成 → 暂停，告知老板"开发还未完成"
+4. 检查 `review.md` 是否存在 → 存在则读（续审场景）
+5. **不读** prd.md / arch.md 全文 → 只在审查时遇到"这个需求对不对"时才按需读验收标准
 
 **CR 的上下文几乎全部留给代码：**
 - 逐个文件审查，一次只读一个文件的 diff

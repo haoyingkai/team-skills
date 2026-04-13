@@ -1,5 +1,27 @@
 # 团队 Skill 迭代记录
 
+## [2.2.0] - 2026-04-13
+
+### 变更摘要
+合并 Epic 支持 + 自审机制 + 远程地址迁移到 GitHub，全面整理版本。
+
+### 变更明细
+- [全角色] handbook.md Step 0 新增 Epic 感知（epic_id → epic.json）和依赖检查（depends_on → 上游 status 校验）
+- [team-pm] handbook.md 场景 B+ 新增 Epic 恢复展示格式（子任务依赖关系视图）
+- [team-pd] SKILL.md + handbook.md 新增 Step 4.5 PRD 自审（含 6 项清单：AC 可测性、边界覆盖、需求完整性、优先级、原型一致性、业务闭环检查）
+- [team-arch] SKILL.md + handbook.md 新增 Step 3.5 方案自审（5 项清单）
+- [team-dev] SKILL.md + handbook.md Step 4 从简单 checkbox 升级为结构化自审（AC 追溯、方案一致性、安全自检、构建验证）
+- [team-qa] SKILL.md + handbook.md 新增 Step 2.5 用例自审（5 项清单）
+- [team-cr] SKILL.md + handbook.md 新增 Step 2.5 评审自审（4 项清单）
+- [DESIGN.md] 版本升级到 2.2.0，新增自审机制和 Epic 支持章节，远程地址从 Gitee 迁移到 GitHub
+- [README.md] 远程地址从 Gitee 迁移到 GitHub，安装命令使用 --ref dev
+
+### 影响范围
+- 受影响的角色: PM、PD、ARCH、DEV、QA、CR（全部 6 个）
+- 是否影响已有任务流程: 是（新增自审步骤 + Epic 依赖检查）
+
+---
+
 ## [2.1.0] - 2026-04-13
 
 ### 变更摘要

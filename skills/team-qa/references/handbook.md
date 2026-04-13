@@ -32,9 +32,17 @@ ARCH 完成方案后、DEV 开始编码前，QA 确认：
 如果老板提供了任务编号（如 `/team-qa TASK-003`）：
 
 1. 读取 `task.json` 的 `progress_summary`
-2. 读取 `progress.md` **最后 3 条**
-3. 读取 `prd.md` 的**验收标准部分**（只读 AC 列表，不读背景和用户故事）
-4. 检查 `qa-report.md` 是否存在 → 存在则读（续测场景）
+2. **Epic 感知**：如果 `task.json` 的 `epic_id` 非 null：
+   - 找到 Epic 目录 `.team/tasks/{epic_id}/`
+   - 读 `epic.json` → 了解 Epic 全局目标和所有子任务（只看 title + status）
+   - 确认自己在 Epic 中的位置（通常是最后环节）
+3. **依赖检查**：如果 `task.json` 有 `depends_on`：
+   - 读上游任务（通常是 DEV/CR）的 `task.json`，确认 `status = "done"`
+   - 如果上游未完成 → 暂停，告知老板"开发/评审还未完成，无法开始测试"
+   - Epic 内子任务时，prd.md 在上游 PD 子任务目录下（按 depends_on 链路找）
+4. 读取 `progress.md` **最后 3 条**
+5. 读取 `prd.md` 的**验收标准部分**（只读 AC 列表，不读背景和用户故事）
+6. 检查 `qa-report.md` 是否存在 → 存在则读（续测场景）
 
 **不要在启动时读**：arch.md（QA 不需要技术方案细节）、项目源代码（等到写测试时再读具体文件）
 

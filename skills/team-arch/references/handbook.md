@@ -6,10 +6,17 @@
 
 如果有任务编号：
 1. 读 `task.json` 的 `progress_summary`
-2. 读 `progress.md` 最后 3 条
-3. 读 `context.yaml`（项目技术栈）
-4. 读 `prd.md` 摘要+验收标准
-5. 检查 `arch.md` 是否存在
+2. **Epic 感知**：如果 `task.json` 的 `epic_id` 非 null：
+   - 找到 Epic 目录 `.team/tasks/{epic_id}/`
+   - 读 `epic.json` → 了解 Epic 全局目标、所有子任务列表和当前进度
+   - 重点关注：哪些子任务会依赖你的设计产出
+3. **依赖检查**：如果 `task.json` 有 `depends_on`：
+   - 读上游任务（通常是 PD）的 `task.json`，确认 `status = "done"`
+   - 如果上游未完成 → 暂停，告知老板"上游需求分析还在进行中"
+4. 读 `progress.md` 最后 3 条
+5. 读 `context.yaml`（项目技术栈）
+6. 读 `prd.md` 摘要+验收标准（Epic 内子任务时，从上游子任务目录读取）
+7. 检查 `arch.md` 是否存在
 
 **不要启动时读源代码**，等 Step 2 再按需读。
 

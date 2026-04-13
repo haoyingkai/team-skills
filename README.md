@@ -20,16 +20,16 @@
 
 ```bash
 # 安装所有角色
-npx skills add https://gitee.com/hao_yk/hyk-skills.git
+npx skills add https://github.com/haoyingkai/team-skills.git
 
 # 只安装特定角色
-npx skills add https://gitee.com/hao_yk/hyk-skills.git --skill team-pm
+npx skills add https://github.com/haoyingkai/team-skills.git --skill team-pm
 
 # 安装测试版（dev 分支）
-npx skills add https://gitee.com/hao_yk/hyk-skills.git#dev
+npx skills add https://github.com/haoyingkai/team-skills.git --ref dev
 
 # 安装指定版本
-npx skills add https://gitee.com/hao_yk/hyk-skills.git#v1.0.0
+npx skills add https://github.com/haoyingkai/team-skills.git#v1.0.0
 ```
 
 ## 使用
@@ -47,6 +47,6 @@ npx skills add https://gitee.com/hao_yk/hyk-skills.git#v1.0.0
 
 ```bash
 # 重新安装即可更新到最新版
-npx skills add https://gitee.com/hao_yk/hyk-skills.git
+npx skills add https://github.com/haoyingkai/team-skills.git
 ```
 

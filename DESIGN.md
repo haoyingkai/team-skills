@@ -1,6 +1,6 @@
 # AI 开发团队 — 架构设计文档
 
-> 版本: 2.0.0 | 更新日期: 2026-04-10
+> 版本: 2.2.0 | 更新日期: 2026-04-13
 > 基于 Claude Code Skills 实现的多智能体软件开发团队
 
 ---
@@ -233,7 +233,28 @@ Step 9: QA 测试验证
 Step 10: PM 汇总报告 → ★ 老板确认完成 ★
 ```
 
-### 5.3 协作规则
+### 5.3 自审机制
+
+每个角色（除 PM）在产出物提交前，必须执行结构化自审：
+
+| 角色 | 自审步骤 | 核心检查项 |
+|------|---------|-----------|
+| PD | Step 4.5 PRD 自审 | AC 可测性、边界覆盖、业务闭环、优先级、原型一致性 |
+| ARCH | Step 3.5 方案自审 | 需求覆盖度、改动范围、接口合理性、风险依赖、DEV 可执行性 |
+| DEV | Step 4 编码自审 | AC 逐条追溯、方案一致性、安全自检、构建验证 |
+| QA | Step 2.5 用例自审 | AC 覆盖完整性、边界充分性、异常路径、用例可执行性 |
+| CR | Step 2.5 评审自审 | AC 追溯完整性、问题可操作性、严重性判定、评审全面性 |
+
+设计原则：全部自审（自己查自己），不搞多角色互审，避免上下文浪费。
+
+### 5.4 Epic 支持
+
+PM 支持将大任务拆分为 Epic + 子任务：
+- Epic 目录下有 `epic.json`，记录所有子任务及依赖关系
+- 每个角色恢复上下文时自动感知 Epic 和依赖链
+- 子任务间通过 `depends_on` 字段串联，上游未完成时自动暂停
+
+### 5.5 协作规则
 
 | 规则 | 说明 |
 |------|------|
@@ -266,7 +287,7 @@ ai-dev-team/                    ← Git 仓库根目录
 
 ### 6.2 远程仓库
 
-- **地址**: `https://gitee.com/hao_yk/hyk-skills.git`
+- **地址**: `https://github.com/haoyingkai/team-skills.git`
 - **分支策略**:
   - `main` — 正式版，仅在老板明确说"发布"时才合并
   - `dev` — 开发测试版，每次修改后自动同步
@@ -277,21 +298,26 @@ ai-dev-team/                    ← Git 仓库根目录
 
 ```bash
 # 同事安装正式版（从远程 main 分支）
-npx skills add https://gitee.com/hao_yk/hyk-skills.git
+npx skills add https://github.com/haoyingkai/team-skills.git
 
 # 只安装特定角色
-npx skills add https://gitee.com/hao_yk/hyk-skills.git --skill team-pm
+npx skills add https://github.com/haoyingkai/team-skills.git --skill team-pm
 
 # 开发者安装本地 dev 版（用于测试）
 npx skills add /Users/haoyk/claudeSkilltry/ai-dev-team --agent claude-code -y
 ```
 
-### 6.4 Gitee 兼容性说明
+### 6.4 分支安装
 
-- Gitee URL **必须加 `.git` 后缀**
-- `--ref` 和 `#branch` 对 Gitee **无效**，远程安装始终拉默认分支（main）
-- 本地路径安装读取当前 checkout 的分支
-- 结论：远程安装 = 正式版，本地安装 = 开发版，天然隔离
+GitHub 支持 `--ref` 参数，可按分支安装：
+
+```bash
+# 安装正式版（main）
+npx skills add https://github.com/haoyingkai/team-skills.git
+
+# 安装开发版（dev）
+npx skills add https://github.com/haoyingkai/team-skills.git --ref dev
+```
 
 ### 6.5 多工具兼容
 
