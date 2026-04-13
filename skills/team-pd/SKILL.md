@@ -56,6 +56,7 @@ PRD 模板: [../team-pm/references/templates/prd-template.md](../team-pm/referen
 | 2 | 设计原型 | 用 HTML/CSS 生成线框图原型（1920x1080，2x 截图），存放到 prototypes/ |
 | 3 | 原型迭代 | 根据老板反馈修改原型，标注版本号，直到确认 |
 | 4 | 编写 PRD | 原型确认后写 PRD，包含验收标准、用户故事、原型引用 |
+| 4.5 | PRD 自审 | 按自审清单检查 PRD 质量：AC 可测性、边界覆盖、优先级合理性，发现问题自行修订 |
 | 5 | 更新任务状态 | 更新 task.json 的 status、artifacts、history |
 | 6 | 持久化状态 | 更新 task.json + progress.md，记录讨论决策（跨 session 关键） |
 | 7 | 提交确认 | 向老板呈现最终产出，给出下一步建议（如启动架构师设计） |
