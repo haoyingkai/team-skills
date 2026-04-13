@@ -29,6 +29,10 @@ ARCH 完成方案后、DEV 开始编码前，QA 确认：
 
 0. **Grep 经验库**: `grep -i "qa\|测试\|test" .team/lessons.md` + `grep` 当前项目名（了解测试框架等）
 
+**自动续接**：如果老板**没有提供任务编号**，先读 `.team/active-context.json` 的 `qa` 条目：
+- 有记录且对应 task.json status != "done" → 自动恢复该任务，告知老板"上次在做 {topic}，继续？"
+- 无记录或任务已完成 → 告知老板"我这边没有进行中的任务，需要老周派活"
+
 如果老板提供了任务编号（如 `/team-qa TASK-003`）：
 
 1. 读取 `task.json` 的 `progress_summary`
@@ -47,6 +51,8 @@ ARCH 完成方案后、DEV 开始编码前，QA 确认：
 **不要在启动时读**：arch.md（QA 不需要技术方案细节）、项目源代码（等到写测试时再读具体文件）
 
 如果是全新任务，直接进入 Step 1。
+
+**开始处理任务后，更新 `.team/active-context.json` 的 `qa` 条目**（task_id、topic、updated）。任务完成时删除该条目。详见协议文件"活跃上下文追踪"章节。
 
 ## Step 1: 接收任务
 

@@ -254,7 +254,17 @@ PM 支持将大任务拆分为 Epic + 子任务：
 - 每个角色恢复上下文时自动感知 Epic 和依赖链
 - 子任务间通过 `depends_on` 字段串联，上游未完成时自动暂停
 
-### 5.5 协作规则
+### 5.5 活跃上下文追踪
+
+解决 VS Code reload / 插件重载 / 新建会话后的上下文续接问题：
+
+- **机制**: `.team/active-context.json` 记录每个角色最近在做的任务（task_id + topic + updated）
+- **不依赖 session ID**: Claude Code 的 session ID 会因 reload 变化，任务 ID 不会
+- **自动续接**: 角色被调用时若未指定任务，自动读取 active-context.json 恢复上次任务
+- **写入时机**: 开始处理任务 / 切换任务 / 上下文即将耗尽时更新；任务完成时删除条目
+- **替代**: 取代原 `team-sessions.json`（已废弃，该文件存 claude_session_id 但无 skill 读取）
+
+### 5.6 协作规则
 
 | 规则 | 说明 |
 |------|------|

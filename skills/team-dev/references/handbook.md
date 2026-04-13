@@ -6,6 +6,10 @@
 
 0. **Grep 经验库**: `grep -i "dev\|开发\|代码" .team/lessons.md` + `grep` 当前项目名
 
+**自动续接**：如果老板**没有提供任务编号**，先读 `.team/active-context.json` 的 `dev` 条目：
+- 有记录且对应 task.json status != "done" → 自动恢复该任务，告知老板"上次在做 {topic}，继续？"
+- 无记录或任务已完成 → 告知老板"我这边没有进行中的任务，需要老周派活"
+
 如果老板提供了任务编号（如 `/team-dev TASK-003`）：
 
 1. 读取 `task.json` 的 `progress_summary` → 一句话了解做到哪了
@@ -32,6 +36,8 @@
 - 感觉上下文紧张时，立即写 progress.md 保存进度，告诉老板开新 session
 
 如果是全新任务，直接进入 Step 1。
+
+**开始处理任务后，更新 `.team/active-context.json` 的 `dev` 条目**（task_id、topic、updated）。任务完成时删除该条目。详见协议文件"活跃上下文追踪"章节。
 
 ## Step 1: 接收任务
 
