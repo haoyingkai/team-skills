@@ -4,10 +4,6 @@
 
 0. **Grep 经验库**: `grep -i "arch\|架构\|技术\|方案" .team/lessons.md`
 
-**自动续接**：如果**没有提供任务编号**，先读 `.team/active-context.json` 的 `arch` 条目：
-- 有记录且对应 task.json status != "done" → 自动恢复该任务，告知老板"上次在做 {topic}，继续？"
-- 无记录或任务已完成 → 告知老板"我这边没有进行中的任务，需要老周派活"
-
 如果有任务编号：
 1. 读 `task.json` 的 `progress_summary`
 2. **Epic 感知**：如果 `task.json` 的 `epic_id` 非 null：
@@ -23,8 +19,6 @@
 7. 检查 `arch.md` 是否存在
 
 **不要启动时读源代码**，等 Step 2 再按需读。
-
-**开始处理任务后，更新 `.team/active-context.json` 的 `arch` 条目**（task_id、topic、updated）。任务完成时删除该条目。详见协议文件"活跃上下文追踪"章节。
 
 ---
 

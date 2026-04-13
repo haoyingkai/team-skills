@@ -1,29 +1,5 @@
 # 团队 Skill 迭代记录
 
-## [2.3.0] - 2026-04-13
-
-### 变更摘要
-新增活跃上下文追踪机制（active-context.json），解决 VS Code reload / 插件重载后会话无法自动续接的问题。不再依赖 claude_session_id。
-
-### 变更明细
-- [protocol] 多 Session 协作规范新增"活跃上下文追踪"章节：定义 `.team/active-context.json` 格式、字段、写入时机、新 Session 恢复流程改为先查 active-context 再走看板
-- [team-pm] handbook Step 0 重写为三级优先级响应（A: 明确指令 → B: 自动续接 → C: 看板展示），Step 4 持久化新增 active-context.json 更新要求
-- [team-pd] handbook Step 0 新增自动续接逻辑 + active-context.json 更新要求
-- [team-arch] handbook Step 0 新增自动续接逻辑 + active-context.json 更新要求
-- [team-dev] handbook Step 0 新增自动续接逻辑 + active-context.json 更新要求
-- [team-qa] handbook Step 0 新增自动续接逻辑 + active-context.json 更新要求
-- [team-cr] handbook Step 0 新增自动续接逻辑 + active-context.json 更新要求
-- [DESIGN.md] 新增 5.5 活跃上下文追踪章节
-
-### 影响范围
-- 受影响的角色: PM、PD、ARCH、DEV、QA、CR（全部 6 个）
-- 是否影响已有任务流程: 否（新增自动续接，不改变原有流程，只是不指定任务时多了一个快捷恢复路径）
-
-### 废弃
-- `team-sessions.json`（基于 claude_session_id 的会话注册表）不再使用，由 `active-context.json` 替代
-
----
-
 ## [2.2.0] - 2026-04-13
 
 ### 变更摘要

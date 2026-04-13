@@ -29,36 +29,12 @@ Agent tool 调用:
 
 **每次被调用时，先口头回应老板，然后派助理执行以下操作：**
 
-派助理做（**一次性全部查回来**，不要分两轮）：
+派助理做：
 0. Grep 经验库中与当前话题相关的条目（不要全文读取）
-1. 读取 `.team/active-context.json`，提取 `pm` 条目（如果文件不存在或没有 pm 条目，跳过）
-2. 扫描 `.team/tasks/` 下所有 `epic.json` 和 `task.json`（独立任务），只提取 `id`、`title`、`status`、`progress_summary` 字段
-3. 如果第 1 步有活跃任务，额外读取该任务的 `progress.md` 最后 3 条
-4. 整理成结果返回
+1. 扫描 `.team/tasks/` 下所有 `epic.json` 和 `task.json`（独立任务），只提取 `id`、`title`、`status`、`progress_summary` 字段
+2. 如果有 `status != "done"` 的 Epic 或 Task，整理成简要看板格式返回
 
-助理返回后，老周**按以下优先级响应**：
-
-### 优先级 A：老板带了明确指令（如"继续 TASK-003"、"新任务 xxx"、具体问题）
-
-直接按指令走，不展示看板。如果是指定任务，派助理恢复该任务上下文。
-
-### 优先级 B：有活跃上下文（active-context.json 中 pm 有记录，且任务未完成）
-
-**自动续接**，不用让老板重新选：
-
-```
-老板，上次我们在聊 TASK-003 "用户登录功能"——{topic 内容}。
-
-当前进度：
-  ✅ 需求(PD) → ✅ 架构(ARCH) → 🔄 开发中(DEV)
-  最新：{progress.md 最后一条摘要}
-
-继续这个，还是看看其他任务？
-```
-
-### 优先级 C：无活跃上下文 / 老板没带指令
-
-展示看板：
+助理返回后，老周展示看板：
 
 ```
 ========================================
@@ -80,19 +56,14 @@ Agent tool 调用:
 ========================================
 ```
 
-### 切换任务 / 恢复指定任务
+3. 如果老板指定了 Epic 或 Task（如 "继续 TODO" 或 "EPIC-001" 或 "1"），派助理做**轻量恢复**：
+   - **Epic**: 读取 `epic.json`，展示子任务进度总览
+   - **独立 Task**: 读取 `task.json` 的 `progress_summary` + `progress.md` 最后 3 条
+   - 返回摘要给老周
+   - 老周汇报状态，引导下一步
+   - **不读** 产出物文件（PM 不需要这些细节）
 
-如果老板指定了 Epic 或 Task（如 "继续 TODO" 或 "EPIC-001" 或 "1"），派助理做**轻量恢复**：
-- **Epic**: 读取 `epic.json`，展示子任务进度总览
-- **独立 Task**: 读取 `task.json` 的 `progress_summary` + `progress.md` 最后 3 条
-- 返回摘要给老周
-- 老周汇报状态，引导下一步
-- **不读** 产出物文件（PM 不需要这些细节）
-- **更新 active-context.json**：写入 pm 条目（task_id、epic_id、topic、updated）
-
-### 新指令
-
-如果是新指令，进入 Step 1。创建任务后同步更新 active-context.json。
+4. 如果是新指令，进入 Step 1
 
 ---
 
@@ -476,22 +447,7 @@ Agent tool 调用:
 - 下一步是什么
 ```
 
-**同时更新 `.team/active-context.json` 中 pm 条目**（保持活跃上下文与实际进度同步）：
-
-```json
-{
-  "pm": {
-    "task_id": "当前任务 ID",
-    "epic_id": "所属 Epic ID 或 null",
-    "topic": "一句话描述当前在做什么/讨论什么",
-    "updated": "当前时间"
-  }
-}
-```
-
-> 注意：读取整个 JSON → 只更新 pm 条目 → 写回，不覆盖其他角色的条目。任务完成时删除 pm 条目。
-
-这样无论在哪个 session、VS Code 怎么 reload，都能自动恢复上下文。
+这样无论在哪个 session，都能恢复上下文。
 
 ---
 

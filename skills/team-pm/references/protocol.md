@@ -715,64 +715,17 @@ Claude Code 每个 session 上下文独立，不会自动继承之前 session �
 - 老板已确认，进入开发阶段
 ```
 
-### 活跃上下文追踪（active-context.json）
-
-**为什么需要**：Claude Code 的 session ID 在 VS Code reload、插件重载、新建会话时都会变化，无法作为恢复依据。因此用**任务 ID**（不会变）替代 session ID 来追踪每个角色"上次在做什么"。
-
-**文件位置**: `.team/active-context.json`
-
-**格式**:
-
-```json
-{
-  "pm": {
-    "task_id": "TASK-003",
-    "epic_id": "EPIC-001",
-    "topic": "讨论 token 刷新策略，等老板决策",
-    "updated": "2026-04-13T10:00:00Z"
-  },
-  "dev": {
-    "task_id": "TASK-003",
-    "epic_id": "EPIC-001",
-    "topic": "实现登录接口，JWT 逻辑写了一半",
-    "updated": "2026-04-13T09:30:00Z"
-  }
-}
-```
-
-**字段说明**:
-
-| 字段 | 必填 | 说明 |
-|------|------|------|
-| `task_id` | 是 | 最近活跃的任务 ID |
-| `epic_id` | 否 | 所属 Epic（如有） |
-| `topic` | 是 | 一句话描述上次在做什么/讨论什么，用于新 session 口头恢复 |
-| `updated` | 是 | ISO 时间戳，用于判断新鲜度 |
-
-**写入时机**（所有角色必须遵守）:
-
-1. **开始处理某个任务时** — 写入该角色的活跃上下文
-2. **切换到另一个任务时** — 覆盖更新
-3. **任务完成时** — 删除该角色的条目（表示无活跃任务）
-4. **上下文即将耗尽时** — 写入当前进展，便于新 session 续接
-
-**写入方式**: 读取整个 JSON → 更新本角色的条目 → 写回。不要覆盖其他角色的条目。
-
 ### 新 Session 恢复流程
 
 任何角色在新 session 中被调用时，**第一步必须是恢复上下文**：
 
 ```
-1. 读取 .team/active-context.json → 查找本角色是否有活跃任务
-2. 如果有且 task_id 对应的 task.json 仍存在且 status != "done":
-   → 自动恢复该任务的上下文（读 task.json + progress.md 最后 3 条）
-   → 口头告知老板："上次我们在做 {topic}，我继续还是换个任务？"
-3. 如果没有活跃上下文、或任务已完成:
-   → 走正常的看板扫描流程
-4. 恢复后继续工作
+1. 读取 task.json → 了解当前在哪一步
+2. 读取 progress.md（如有）→ 了解上次做到哪
+3. 读取相关产出物（prd.md、arch.md 等）→ 了解前序产出
+4. 向老板确认理解是否正确
+5. 继续工作
 ```
-
-**关键原则**: 不依赖 Claude session ID，不依赖 `team-sessions.json`。只看 `.team/active-context.json` 和 `.team/tasks/` 下的文件状态。VS Code 怎么 reload 都不影响。
 
 ### 任务看板
 
